@@ -31,7 +31,6 @@ namespace LexiconApi.Controllers
             }
         }
 
-
         // POST api/<AttorneyController>
         [HttpPost]
         public IActionResult AddClient([FromBody] ClientDTO client)

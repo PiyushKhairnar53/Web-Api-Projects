@@ -18,12 +18,16 @@ namespace LexiconApi.Services.DTOs
         [Required]
         public int IsActive { get; set; }
 
+        [Required]
         public int JurisdictionId { get; set; }
 
+        [Required]
         public int ClientId { get; set; }
 
+        [Required]
         public int BillingAttorneyId { get; set; }
 
+        [Required]
         public int ResponsibleAttorneyId { get; set; }
 
     }

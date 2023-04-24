@@ -12,7 +12,9 @@ namespace LexiconApi.Services.DTOs
     public class InvoiceDTO
     {
         public int Id { get; set; }
+        [Required]
         public DateTime Date { get; set; }
+        [Required]
         public int HoursWorked { get; set; }
         [JsonIgnore]
         public float? TotalAmount { get; set; }

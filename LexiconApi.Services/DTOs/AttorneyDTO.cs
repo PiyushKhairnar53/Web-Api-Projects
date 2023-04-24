@@ -25,6 +25,7 @@ namespace LexiconApi.Services.DTOs
         public string Phone { get; set; } = null!;
         [Required]
         public int Rate { get; set; }
+        [Required]
         public int JurisdictionId { get; set; }    
        
     }
