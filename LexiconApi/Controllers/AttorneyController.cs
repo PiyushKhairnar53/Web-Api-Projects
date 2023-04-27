@@ -25,7 +25,6 @@ namespace LexiconApi.Controllers
         public IActionResult GetAllAttorneys()
         {
             Response response;
-
             try
             {
                 IEnumerable<AttorneyDTO> attorneys = _attorneyService.GetAllAttorneys();
@@ -35,6 +34,23 @@ namespace LexiconApi.Controllers
             catch (Exception ex)
             {
                 response = new Response(StatusCodes.Status400BadRequest,"Somethng went wrong"+ex.Message, null);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("AttorneysForJurisdiction/{id}")]
+        public IActionResult GetAttorneysForJurisdiction(int id)
+        {
+            Response response;
+            try
+            {
+                IEnumerable<AttorneyDTO> attorneys = _attorneyService.GetAttorneysForJurisdiction(id);
+                response = new Response(StatusCodes.Status200OK, "Attorneys for jurisdiction retreived successfully", attorneys);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response = new Response(StatusCodes.Status400BadRequest, "Somethng went wrong" + ex.Message, null);
                 return BadRequest(response);
             }
         }

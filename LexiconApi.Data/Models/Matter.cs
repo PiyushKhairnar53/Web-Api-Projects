@@ -14,10 +14,11 @@ namespace LexiconApi.Data.Models
         public int Id { get; set; }
         public string Title { get; set; } = null!;
         public int IsActive { get; set; }
+        public string? Description { get; set; }
+        public string? Category { get; set; }
 
         [Required]
         public int JurisdictionId { get; set; }
-        [JsonIgnore]
         public Jurisdiction Jurisdiction { get; set; } = null!;
 
         [Required]
@@ -26,12 +27,10 @@ namespace LexiconApi.Data.Models
 
         [Required]
         public int BillingAttorneyId { get; set; }
-        [JsonIgnore]
         public Attorney BillingAttorney { get; set; }
 
         [Required]
         public int ResponsibleAttorneyId { get; set; }
-        [JsonIgnore]
         public Attorney ResponsibleAttorney { get; set; }
 
         public ICollection<Invoice> Invoices { get; set; }

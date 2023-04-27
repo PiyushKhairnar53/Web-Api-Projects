@@ -1,14 +1,14 @@
-﻿using System;
+﻿using LexiconApi.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace LexiconApi.Services.DTOs
 {
-    public class MatterDTO
+    public class MatterForClientDTO
     {
         public int Id { get; set; }
 
@@ -21,16 +21,14 @@ namespace LexiconApi.Services.DTOs
         public string? Category { get; set; }
 
         [Required]
-        public int JurisdictionId { get; set; }
+        public string JurisdictionArea { get; set; }
+        public string ClientName { get; set; }
 
         [Required]
-        public int ClientId { get; set; }
+        public string BillingAttorneyName { get; set; }
 
         [Required]
-        public int BillingAttorneyId { get; set; }
-
-        [Required]
-        public int ResponsibleAttorneyId { get; set; }
+        public string ResponsibleAttorneyeName { get; set; }
 
     }
 }

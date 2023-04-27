@@ -1,4 +1,5 @@
-﻿using LexiconApi.Services.DTOs;
+﻿using LexiconApi.Models;
+using LexiconApi.Services.DTOs;
 using LexiconApi.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +22,13 @@ namespace LexiconApi.Controllers
         [HttpGet]
         public IActionResult GetAllClients()
         {
+            Response response;
             try
             {
-                return Ok(_clientService.GetAllClients());
+                IEnumerable<ClientDTO> matters = _clientService.GetAllClients();
+                response = new Response(StatusCodes.Status200OK, "Clients retreived successfully", matters);
+                return Ok(response);
+
             }
             catch (Exception ex)
             {

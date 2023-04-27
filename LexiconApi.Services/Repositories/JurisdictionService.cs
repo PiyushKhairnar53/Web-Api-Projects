@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LexiconApi.Data.DBContext;
+using LexiconApi.Data.Models;
 using LexiconApi.Services.DTOs;
 using LexiconApi.Services.Mappers;
 using System;
@@ -13,6 +14,7 @@ namespace LexiconApi.Services.Repositories
     public interface IJurisdictionService 
     {
         public IEnumerable<JurisdictionDTO> GetAllJurisdictions();
+        public Jurisdiction AddJurisdiction(JurisdictionDTO entity);
 
     }
 
@@ -30,6 +32,25 @@ namespace LexiconApi.Services.Repositories
         {
             var jurisdictions = _lexiconDBContext.Jurisdictions.ToList();
             return jurisdictions.Select(c => new JurisdictionMapper().Map(c)).ToList();
+        }
+
+        public Jurisdiction AddJurisdiction(JurisdictionDTO entity)
+        {
+            try
+            {
+                var newJurisdiction = new Jurisdiction
+                {
+                    Id = entity.Id,
+                    Area = entity.Area,             
+                };
+                _lexiconDBContext.Jurisdictions.Add(newJurisdiction);
+                _lexiconDBContext.SaveChanges();
+                return newJurisdiction;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
     }
 }

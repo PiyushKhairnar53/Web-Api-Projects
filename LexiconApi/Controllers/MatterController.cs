@@ -21,13 +21,28 @@ namespace LexiconApi.Controllers
             _matterService = matterService;
         }
 
-        // GET: api/<AttorneyController>
         [HttpGet]
         public IActionResult GetAllMatters()
         {
             try
             {
-                IEnumerable<IGrouping<int, Matter>> matters = _matterService.GetAllMatters();
+                IEnumerable<MatterDTO> matters = _matterService.GetAllMatters();
+                Response response = new Response(StatusCodes.Status200OK, "Matters retreived successfully", matters);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // GET: api/<AttorneyController>
+        [HttpGet("MattersByClient")]
+        public IActionResult GetMattersByClient()
+        {
+            try
+            {
+                IEnumerable<IGrouping<int, MatterByClientDTO>> matters = _matterService.GetMattersByClient();
                 Response response = new Response(StatusCodes.Status200OK, "Matters retreived successfully", matters);
                 return Ok(response);
             }
@@ -66,7 +81,7 @@ namespace LexiconApi.Controllers
             Response response;
             try
             {
-                IEnumerable<MatterDTO> matters = _matterService.GetMattersForClient(id);
+                IEnumerable<MatterForClientDTO> matters = _matterService.GetMattersForClient(id);
 
                 if (matters.Any())
                 {

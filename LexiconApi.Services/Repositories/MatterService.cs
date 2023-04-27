@@ -15,9 +15,10 @@ namespace LexiconApi.Services.Repositories
 {
     public interface IMatterService
     {
-        public IEnumerable<IGrouping<int, Matter>> GetAllMatters();
+        public IEnumerable<MatterDTO> GetAllMatters();
+        public IEnumerable<IGrouping<int, MatterByClientDTO>> GetMattersByClient();
         public Matter AddMatter(MatterDTO matter);
-        public IEnumerable<MatterDTO> GetMattersForClient(int clientId);
+        public IEnumerable<MatterForClientDTO> GetMattersForClient(int clientId);
 
     }
     public class MatterService : IMatterService
@@ -30,9 +31,21 @@ namespace LexiconApi.Services.Repositories
             _mapper = mapper;
         }
 
-        public IEnumerable<IGrouping<int, Matter>> GetAllMatters()
+        public IEnumerable<MatterDTO> GetAllMatters()
         {
-            IEnumerable<IGrouping<int,Matter>> matterList = _lexiconDBContext.Matters.GroupBy(s => s.ClientId).ToList();
+            var allMatters = _lexiconDBContext.Matters.ToList();
+            return allMatters.Select(c => new MatterMapper().Map(c)).ToList();
+        }
+
+        public IEnumerable<IGrouping<int, MatterByClientDTO>> GetMattersByClient()
+        {
+            var matterList = _lexiconDBContext.Matters
+                .Include(m => m.BillingAttorney)
+                .Include(m => m.ResponsibleAttorney)
+                .Include(m => m.Jurisdiction)
+                .Include(m => m.Client)
+                .Select(c => new MatterByClientMapper().Map(c)).AsEnumerable()
+                .GroupBy(s => s.ClientId).ToList();
             //var matters = _lexiconDBContext.Matters.ToList();
             return matterList;
         }
@@ -42,27 +55,24 @@ namespace LexiconApi.Services.Repositories
         {
             try
             {
-                Attorney attorney = _lexiconDBContext.Attorneys.FirstOrDefault(s => s.Id == matter.BillingAttorneyId);
-
-                if (attorney!.JurisdictionId == matter.JurisdictionId) 
+                var newMatter = new Matter
                 {
-                    var newMatter = new Matter
-                    {
-                        Id = matter.Id,
-                        Title = matter.Title,
-                        IsActive = matter.IsActive,
-                        JurisdictionId = matter.JurisdictionId,
-                        ClientId = matter.ClientId,
-                        BillingAttorneyId = matter.BillingAttorneyId,
-                        ResponsibleAttorneyId = matter.ResponsibleAttorneyId
+                    Id = matter.Id,
+                    Title = matter.Title,
+                    IsActive = matter.IsActive,
+                    Description = matter.Description,
+                    Category = matter.Category,
+                    JurisdictionId = matter.JurisdictionId,
+                    ClientId = matter.ClientId,
+                    BillingAttorneyId = matter.BillingAttorneyId,
+                    ResponsibleAttorneyId = matter.ResponsibleAttorneyId
 
-                    };
-                    _lexiconDBContext.Matters.Add(newMatter);
-                    _lexiconDBContext.SaveChanges();
+                };
+                _lexiconDBContext.Matters.Add(newMatter);
+                _lexiconDBContext.SaveChanges();
 
-                    return newMatter;
-                }
-                return null;
+                return newMatter;
+                
             }
             catch (Exception e)
             {
@@ -70,10 +80,15 @@ namespace LexiconApi.Services.Repositories
             }
         }
 
-        public IEnumerable<MatterDTO> GetMattersForClient(int clientId)
+        public IEnumerable<MatterForClientDTO> GetMattersForClient(int clientId)
         {
-            var mattersByClient = _lexiconDBContext.Matters.Where(c => c.ClientId.Equals(clientId));
-            return mattersByClient.Select(c => new MatterMapper().Map(c)).ToList();
+            var mattersByClient = _lexiconDBContext.Matters
+                .Include(m => m.BillingAttorney)
+                .Include(m => m.ResponsibleAttorney)
+                .Include(m => m.Jurisdiction)
+                .Include(m => m.Client)
+                .Where(c => c.ClientId.Equals(clientId));
+            return mattersByClient.Select(c => new MatterForClientMapper().Map(c)).ToList();
         }
 
     }

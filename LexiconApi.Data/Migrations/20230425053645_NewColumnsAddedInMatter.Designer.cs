@@ -4,6 +4,7 @@ using LexiconApi.Data.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LexiconApi.Data.Migrations
 {
     [DbContext(typeof(LexiconDBContext))]
-    partial class LexiconDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230425053645_NewColumnsAddedInMatter")]
+    partial class NewColumnsAddedInMatter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

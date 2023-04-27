@@ -2,28 +2,27 @@
 using LexiconApi.Services.DTOs;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LexiconApi.Services.Mappers
 {
-    public class MatterMapper
+    public class MatterForClientMapper
     {
-        public MatterDTO Map(Matter entity)
+        public MatterForClientDTO Map(Matter entity)
         {
-            return new MatterDTO
+            return new MatterForClientDTO
             {
                 Id = entity.Id,
                 Title = entity.Title,
                 IsActive = entity.IsActive,
                 Description = entity.Description,
                 Category = entity.Category,
-                JurisdictionId = entity.JurisdictionId,
-                ClientId = entity.ClientId,
-                BillingAttorneyId = entity.BillingAttorneyId,
-                ResponsibleAttorneyId = entity.ResponsibleAttorneyId
+                ClientName = entity.Client.Name,
+                JurisdictionArea = entity.Jurisdiction.Area,
+                BillingAttorneyName = entity.BillingAttorney.Name,
+                ResponsibleAttorneyeName = entity.ResponsibleAttorney.Name
             };
         }
     }

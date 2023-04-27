@@ -26,7 +26,7 @@ namespace LexiconApi.Controllers
             Response response;
             try
             {
-                IEnumerable<IGrouping<int, Invoice>> invoices = _invoiceService.GetAllInvoices();
+                IEnumerable<IGrouping<int, InvoicesByMatterDTO>> invoices = _invoiceService.GetInvoicesByMatter();
                 response = new Response(StatusCodes.Status200OK, "Invoices retreived successfully", invoices);
                 return Ok(response);
             }
@@ -44,7 +44,7 @@ namespace LexiconApi.Controllers
             try
             {
                 //return Ok(_invoiceService.GetLastWeekBillingsByAttorney());
-                IEnumerable<IGrouping<int, Invoice>> invoices = _invoiceService.GetLastWeekBillingsByAttorney();
+                IEnumerable<IGrouping<int, BillingsByAttorneyDTO>> invoices = _invoiceService.GetLastWeekBillingsByAttorney();
                 response = new Response(StatusCodes.Status200OK, "Invoices retreived successfully", invoices);
                 return Ok(response);
             }
@@ -62,7 +62,7 @@ namespace LexiconApi.Controllers
             try
             {
                 //return Ok(_invoiceService.GetLastWeekBillingsForAttorney(attorneyId));
-                IEnumerable<InvoiceDTO> invoices = _invoiceService.GetLastWeekBillingsForAttorney(attorneyId);
+                IEnumerable<BillingsForAttorneyDTO> invoices = _invoiceService.GetLastWeekBillingsForAttorney(attorneyId);
                 if (invoices.Any()) 
                 {
                     response = new Response(StatusCodes.Status200OK, "Invoices For attorney retreived successfully", invoices);
@@ -108,27 +108,23 @@ namespace LexiconApi.Controllers
         public IActionResult GetInvoicesForMatter(int matterId)
         {
             Response response;
-            try
-            {
+          
                 if (matterId > 0)
                 {
-                    IEnumerable<InvoiceDTO> invoices = _invoiceService.GetInvoicesForMatter(matterId);
+                    IEnumerable<InvoicesForMatterDTO> invoices = _invoiceService.GetInvoicesForMatter(matterId);
                     if (invoices.Any())
                     {
                         response = new Response(StatusCodes.Status200OK, "Invoices for matter retreived successfully", invoices);
                         return Ok(response);
 
                     }
-                    response = new Response(StatusCodes.Status200OK, "This Matter has no invoices", invoices);
+                    response = new Response(StatusCodes.Status404NotFound, "This Matter has no invoices", "");
                     return NotFound(response);
                 }
-                return BadRequest("Enter valid matter Id");
-            }
-            catch (Exception ex)
-            {
-                response = new Response(StatusCodes.Status400BadRequest, "Somethng went wrong" + ex.Message, null);
-                return BadRequest(response);
-            }
+                
+           
+            response = new Response(StatusCodes.Status400BadRequest, "Something went wrong", null);
+            return NotFound(response);
         }
     }
 }

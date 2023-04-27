@@ -15,6 +15,7 @@ namespace LexiconApi.Services.Repositories
     {
         public IEnumerable<AttorneyDTO> GetAllAttorneys();
         public Attorney AddAttorney(AttorneyDTO attorney);
+        public IEnumerable<AttorneyDTO> GetAttorneysForJurisdiction(int jurisdictionId);
     }
     public class AttorneyService:IAttorneyService
     {
@@ -30,6 +31,12 @@ namespace LexiconApi.Services.Repositories
         {
             var attorneys = _lexiconDBContext.Attorneys.ToList();
             return attorneys.Select(c => new AttorneyMapper().Map(c)).ToList();
+        }
+
+        public IEnumerable<AttorneyDTO> GetAttorneysForJurisdiction(int jurisdictionId)
+        {
+            var attorneysForJurisdiction = _lexiconDBContext.Attorneys.Where(c => c.JurisdictionId.Equals(jurisdictionId));
+            return attorneysForJurisdiction.Select(c => new AttorneyMapper().Map(c)).ToList();
         }
 
         public Attorney AddAttorney(AttorneyDTO attorney)

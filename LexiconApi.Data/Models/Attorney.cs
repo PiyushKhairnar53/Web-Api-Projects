@@ -19,6 +19,7 @@ namespace LexiconApi.Data.Models
         public int Rate { get; set; }
 
         public int JurisdictionId { get; set; }
+
         [JsonIgnore]
         public Jurisdiction Jurisdiction { get; set; } = null!;
 
